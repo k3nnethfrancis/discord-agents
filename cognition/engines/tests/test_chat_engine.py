@@ -4,27 +4,35 @@ Module for testing the chat engine
 
 import asyncio
 from cognition.engines.chat_engine import ChatEngine, Conversation
-from cognition.llms.openai import OpenAIModel
-from cognition.llms.huggingface import LocalModel
+# from cognition.llms.openai import OpenAIModel
+# from cognition.llms.huggingface import LocalModel
+from cognition.llms.ollama import OllamaModel
 
 system_prompt = "You are a large language model"
 
 conversation = Conversation()
 conversation.add_message({"role": "system", "content": system_prompt})
 
-llm = OpenAIModel()
+# llm = OpenAIModel()
 # llm = LocalModel()
+llm = OllamaModel()
 
 chat_engine = ChatEngine(llm=llm, conversation=conversation)
 
-# Test prompt
-test_prompt = "What is the capital of France?"
+# Test prompts
+test_prompts = [
+    "What is the capital of France?",
+    "What is the population of Paris?",
+    "Can you tell me a fun fact about the Eiffel Tower?",
+    "What is the first question I asked you?"
+]
 
-print(chat_engine.chat(test_prompt))
+for prompt in test_prompts:
+    print(f"User: {prompt}")
+    response = chat_engine.chat(prompt)
+    print(f"Assistant: {response}\n\n")
 
-
-# conversation.add_message({"role": "user", "content": test_prompt})
-
+# Uncomment the following lines to test async functionality
 # async def test_chat_engine():
 #     async for response in chat_engine._arun():
 #         print(response)
